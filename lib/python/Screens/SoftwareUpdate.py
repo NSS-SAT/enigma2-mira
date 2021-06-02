@@ -18,8 +18,6 @@ from Tools.HardwareInfo import HardwareInfo
 from enigma import eTimer, getBoxType, eDVBDB
 from urllib2 import urlopen
 import datetime, os, json
-import time
-import calendar
 
 class UpdatePlugin(Screen, ProtectedScreen):
 	skin = """
@@ -123,7 +121,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 					elif 'en_EN' in message:
 						message = message['en_EN']
 					else:
-						message =  _("The current image might not be stable.\nFor more information see %s.") % ("nonsolosat.net")
+						message =  _("The current image might not be stable.\nFor more information see %s.") % ("openpli.org")
 
 			except Exception, e:
 				print "[SoftwareUpdate] status error: ", str(e)
@@ -131,7 +129,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 
 		# or display a generic warning if fetching failed
 		else:
-			message = _("The status of the current image could not be checked because %s can not be reached.") % ("nonsolosat.net")
+			message = _("The status of the current image could not be checked because %s can not be reached.") % ("openpli.org")
 
 		# show the user the message first
 		if message is not None:
@@ -148,10 +146,10 @@ class UpdatePlugin(Screen, ProtectedScreen):
 	def getLatestImageTimestamp(self):
 		def gettime(url):
 			try:
-				return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(calendar.timegm(urlopen("%s/Packages.gz" % url).info().getdate('Last-Modified'))-time.altzone))
+				return str(datetime.datetime.strptime(urlopen("%s/Packages.gz" % url).info()["Last-Modified"], '%a, %d %b %Y %H:%M:%S %Z'))
 			except:
 				return ""
-		return sorted([gettime(open("/etc/opkg/%s" % file, "r").readlines()[0].split()[2]) for file in os.listdir("/etc/opkg") if not file.startswith("3rd-party") and file not in ("arch.conf", "opkg.conf", "picons-feed.conf")], reverse=True)[0]
+		return sorted([gettime(open("/etc/opkg/%s" % file, "r").readlines()[0].split()[2]) for file in os.listdir("/etc/opkg") if not file.startswith("3rd-party") and file not in ("arch.conf", "opkg.conf")], reverse=True)[0]
 
 	def startActualUpdate(self,answer):
 		if answer:
