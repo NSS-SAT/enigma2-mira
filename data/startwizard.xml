@@ -219,7 +219,7 @@ self.selectKey("LEFT")
 self.selectKey("RIGHT")
 			</code>
 		</step>
-		<step id="channels">
+		<!--<step id="channels">
 			<condition>
 from Components.NimManager import nimmanager
 self.condition = nimmanager.somethingConnected() and config.misc.installwizard.hasnetwork.value and config.misc.installwizard.opkgloaded.value
@@ -232,7 +232,7 @@ self.selectKey("LEFT")
 self.selectKey("RIGHT")
 			</code>
 		</step>
-		<!--<step id="channels">
+		<step id="channels">
 		<step id="fallbacktuner">
 			<condition>
 from Components.NimManager import nimmanager
